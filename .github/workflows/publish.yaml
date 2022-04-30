@@ -30,12 +30,19 @@ jobs:
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          output: ./results/
+          output: ./codeql/
+
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: codeql SARIF file
+          path: ./codeql/go.sarif
+          retention-days: 5
 
       - name: "Scorecard analysis"
         uses: ossf/scorecard-action@c1aec4ac820532bab364f02a81873c555a0ba3a1 # v1.0.4
         with:
-          results_file: results.sarif
+          results_file: scorecard.sarif
           results_format: sarif
           repo_token: ${{ secrets.SCORECARD_READ_TOKEN }}
           publish_results: true
@@ -43,11 +50,11 @@ jobs:
       - name: "Upload artifact"
         uses: actions/upload-artifact@v3
         with:
-          name: SARIF file
-          path: ./results/scorecard.sarif
+          name: scorecard SARIF file
+          path: scorecard.sarif
           retention-days: 5
       
       - name: "Upload to code-scanning"
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: ./results
+          sarif_file: scorecard.sarif
