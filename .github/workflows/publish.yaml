@@ -58,3 +58,9 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: scorecard.sarif
+
+      - name: "Install pasarif"
+        uses: yolocs/pasarif@v0.1
+
+      - name: "Check results"
+        run: pasarif -f scorecard.sarif -f ./codeql/go.sarif
