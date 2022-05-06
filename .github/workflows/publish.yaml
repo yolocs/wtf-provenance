@@ -60,7 +60,7 @@ jobs:
           sarif_file: scorecard.sarif
 
       - name: "Install pasarif"
-        uses: yolocs/pasarif@v0.2
+        uses: yolocs/pasarif@v0.3
 
       - name: "Check results"
         run: pasarif -f scorecard.sarif -f ./codeql/go.sarif
