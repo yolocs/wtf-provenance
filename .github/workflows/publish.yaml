@@ -63,4 +63,4 @@ jobs:
         uses: yolocs/pasarif@v0.3
 
       - name: "Check results"
-        run: pasarif -f scorecard.sarif -f ./codeql/go.sarif
+        run: pasarif query -f scorecard.sarif -f ./codeql/go.sarif
