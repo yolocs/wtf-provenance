@@ -110,7 +110,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: 'projects/220951778751/locations/global/workloadIdentityPools/github-pool/providers/github'
-          service_account: 'github@$PROJECT_ID.iam.gserviceaccount.com'
+          service_account: 'github@${{env.PROJECT_ID}}.iam.gserviceaccount.com'
     
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
@@ -123,14 +123,14 @@ jobs:
       - name: Build
         run: |-
           docker build \
-            --tag "gcr.io/$PROJECT_ID/wtf-provenance:$GITHUB_SHA" \
+            --tag "gcr.io/${{env.PROJECT_ID}}/wtf-provenance:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
 
       - name: Publish
         run: |-
-          docker push "gcr.io/$PROJECT_ID/wtf-provenance:$GITHUB_SHA"
+          docker push "gcr.io/${{env.PROJECT_ID}}/wtf-provenance:$GITHUB_SHA"
 
       - uses: actions/download-artifact@v3
         with:
@@ -145,11 +145,11 @@ jobs:
 
       - name: Sign
         run: |
-          cosign sign --key gcpkms://projects/$PROJECT_ID/locations/global/keyRings/cosign-keys/cryptoKeys/default/versions/1 \
+          cosign sign --key gcpkms://projects/${{env.PROJECT_ID}}/locations/global/keyRings/cosign-keys/cryptoKeys/default/versions/1 \
             -a "repo=${{ github.repository }}" \
             -a "workflow=${{ github.workflow }}" \
             -a "ref=${{ github.sha }}" \
             -a "unittests.passed=true" \
             -a "codeql.results=$(pasarif query -v ids -f codeql.sarif)" \
             -a "scorecard.results=$(pasarif query -v ids -f scorecard.sarif)" \
-            "gcr.io/$PROJECT_ID/wtf-provenance:$GITHUB_SHA"
+            "gcr.io/${{env.PROJECT_ID}}/wtf-provenance:$GITHUB_SHA"
