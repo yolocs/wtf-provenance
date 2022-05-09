@@ -134,7 +134,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: go.sarif
+          name: codeql.sarif
 
       - uses: actions/download-artifact@v3
         with:
