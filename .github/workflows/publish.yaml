@@ -134,7 +134,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: codeql.sarif
+          name: go.sarif
 
       - uses: actions/download-artifact@v3
         with:
@@ -150,6 +150,6 @@ jobs:
             -a "workflow=${{ github.workflow }}" \
             -a "ref=${{ github.sha }}" \
             -a "unittests.passed=true" \
-            -a "codeql.results=$(pasarif query -v ids -f codeql.sarif)" \
-            -a "scorecard.results=$(pasarif query -v ids -f scorecard.sarif)" \
+            -a 'codeql.results="$(pasarif query -v ids -f go.sarif)"' \
+            -a 'scorecard.results="$(pasarif query -v ids -f scorecard.sarif)"' \
             "gcr.io/${{env.PROJECT_ID}}/wtf-provenance:$GITHUB_SHA"
