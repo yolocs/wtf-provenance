@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	log.Println("Starting...")
 	projectID := os.Getenv("PROJECT_ID")
 	if projectID == "" {
 		log.Fatal("no PROJECT_ID specified")
