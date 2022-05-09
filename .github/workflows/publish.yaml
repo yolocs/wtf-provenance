@@ -141,7 +141,7 @@ jobs:
           name: scorecard.sarif
 
       - uses: sigstore/cosign-installer@main
-      - uses: yolocs/pasarif@v0.5
+      - uses: yolocs/pasarif@v0.6
 
       - name: Sign
         run: |
