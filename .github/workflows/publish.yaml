@@ -142,8 +142,10 @@ jobs:
           name: scorecard.sarif
 
       - uses: sigstore/cosign-installer@main
-      - uses: yolocs/pasarif@v0.6
+      # - uses: yolocs/pasarif@v0.6
 
+      # -a "codeql.results=$(pasarif query -v ids -f go.sarif)" \
+      # -a "scorecard.results=$(pasarif query -v ids -f scorecard.sarif)" \
       - name: Sign
         run: |
           cosign sign --key gcpkms://projects/${{env.PROJECT_ID}}/locations/global/keyRings/cosign-keys/cryptoKeys/default/versions/1 \
@@ -151,6 +153,6 @@ jobs:
             -a "workflow=${{ github.workflow }}" \
             -a "ref=${{ github.sha }}" \
             -a "unittests.passed=true" \
-            -a "codeql.results=$(pasarif query -v ids -f go.sarif)" \
-            -a "scorecard.results=$(pasarif query -v ids -f scorecard.sarif)" \
+            -a "codeql.results=$(cat go.sarif | jq -r '.runs[].results[].ruleId' | wc -l)" \
+            -a "scorecard.results=$(cat scorecard.sarif | jq -r '.runs[].results[].ruleId' | wc -l)" \
             "gcr.io/${{env.PROJECT_ID}}/wtf-provenance:$GITHUB_SHA"
